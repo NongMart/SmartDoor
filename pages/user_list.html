@@ -456,6 +456,10 @@
       });
     });
 
+    if (!sessionStorage.getItem("session")) {
+      window.location.href = "../index.html";
+    }
+
     // Get the value of the "username" session
     var username = sessionStorage.getItem("username");
 
