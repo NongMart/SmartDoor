@@ -179,6 +179,7 @@
 
             username = snapshot.val().username;
             password = snapshot.val().password;
+            name = snapshot.val().name;
         }, function (error) {
             console.log("Error: " + error.code);
         });
@@ -190,6 +191,7 @@
             if (username_input == username && password_input == password) {
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("password", password);
+                sessionStorage.setItem("name", name);
                 document.location.href = "admin_home.html";
             }
             else {

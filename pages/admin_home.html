@@ -40,6 +40,58 @@
     <script src="https://www.gstatic.com/firebasejs/live/3.1/firebase.js"></script>
 </head>
 
+<style>
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 0;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        width: 50%;
+        /* Set width to 50% */
+        margin: 10% auto;
+        /* Center the modal vertically and horizontally */
+        padding: 20px;
+        border: 1px solid #888;
+    }
+
+    .close {
+        color: #aaa;
+        position: absolute;
+        /* Change to absolute positioning */
+        right: 20px;
+        /* Position 20px from the right */
+        top: 0;
+        /* Position at the top */
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
 <body class="g-sidenav-show   bg-gray-100">
     <div class="min-height-300 bg-primary position-absolute w-100"></div>
     <aside
@@ -134,9 +186,17 @@
         <div class="card shadow-lg">
             <div class="card-header pb-0 pt-3 ">
                 <div class="float-start">
-                    <h5 class="mt-3 mb-0">
-                        <p id="displayUsername"></p>
-                    </h5>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center flex-row">
+                            <h6 class="mb-0 mt-3" id="nameContainer"></h6>
+                            <!-- <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer mt-3"></i> -->
+                        </div>
+                    </div>
+                    <!-- <h5 class="mt-3 mb-0">
+                    </h5> -->
+                    <!-- <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip"
+                        data-bs-placement="top" title="Edit Card"></i> -->
+
                 </div>
                 <div class="float-end mt-4">
                     <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
@@ -147,6 +207,23 @@
             </div>
             <hr class="horizontal dark my-1">
             <div class="card-body pt-sm-3 pt-0 overflow-auto">
+
+                <button id="myBtn" class="btn btn-outline-dark w-100">Change Password</button>
+
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <hr class="horizontal dark my-1 mt-4">
+                        <div class="mt-3">
+                            <div id="output"></div>
+                            <input type="password" id="oldPassword" placeholder="Old Password">
+                            <input type="password" id="newPassword" placeholder="New Password">
+                            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+                            <button id="updatePasswordBtn">Update Password</button>
+                        </div>
+                    </div>
+                </div>
+
 
                 <button class="btn bg-gradient-dark w-100" onclick="logout()">LOGOUT</button>
 
@@ -187,17 +264,63 @@
     <script src="../assets/js/argon-dashboard.min.js?v=2.0.4"></script>
 
     <script>
+        // Initialize Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyBsmJrwR4TiIIezxC94aGF4-Cdb7RppUhY",
+            authDomain: "smartdoorit5102-d53ff.firebaseapp.com",
+            databaseURL: "https://smartdoorit5102-d53ff-default-rtdb.firebaseio.com",
+            projectId: "smartdoorit5102-d53ff",
+            storageBucket: "smartdoorit5102-d53ff.appspot.com",
+            messagingSenderId: "735550711784",
+            appId: "1:735550711784:web:fe4dea8899f8f1007ee65d"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        var database = firebase.database();
+        var nameRef = database.ref("admin/name");
+
+        // Get the value of the "username" session
+        var username = sessionStorage.getItem("username");
+        var password = sessionStorage.getItem("password");
+        var name = sessionStorage.getItem("name");
+
+        // Get name from Firebase and store it in session storage
+        nameRef.on("value", function (snapshot) {
+            sessionStorage.setItem("name", snapshot.val());
+            displayName();
+        });
+
+        // Display name from session storage
+        function displayName() {
+            document.getElementById("nameContainer").innerHTML = '<div id="name">' + name + '<i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer mt-3" id="editButton" onclick="editName()"></i></div>';
+        }
+
+        displayName();
+
+        // Edit name
+        function editName() {
+            var name = sessionStorage.getItem("name");
+            document.getElementById("nameContainer").innerHTML = '<input id="nameInput" type="text" value="' + name + '"><button onclick="updateName()">Update</button>';
+        }
+
+        // Update name in Firebase and session storage
+        function updateName() {
+            var name = document.getElementById("nameInput").value;
+            nameRef.set(name);
+            sessionStorage.setItem("name", name);
+            displayName();
+        }
+
         if (!sessionStorage.getItem("username")) {
             window.location.href = "../index.html";
         }
-        // Get the value of the "username" session
-        var username = sessionStorage.getItem("username");
 
         // Get the element where you want to display the username
-        var displayUsername = document.getElementById("displayUsername");
+        // var displayName = document.getElementById("displayName");
 
         // Insert the username into the HTML
-        displayUsername.innerHTML = username;
+        // displayName.innerHTML = name;
 
         function logout() {
             window.sessionStorage.clear();
@@ -207,6 +330,82 @@
             });
             location.href = "../index.html";
         }
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+
+        // Get references to HTML elements
+        var oldPassword = document.getElementById("oldPassword");
+        var newPassword = document.getElementById("newPassword");
+        var confirmPassword = document.getElementById("confirmPassword");
+        var updatePasswordBtn = document.getElementById("updatePasswordBtn");
+        var output = document.getElementById("output");
+
+        // Get current password from session
+        var currentPassword = sessionStorage.getItem("password");
+
+        // Check if old password is correct
+        updatePasswordBtn.addEventListener("click", function () {
+            if (oldPassword.value !== currentPassword) {
+                output.innerHTML = "Wrong Old Password";
+                return;
+            }
+
+            // Check if new password and confirm password match
+            if (newPassword.value !== confirmPassword.value) {
+                output.innerHTML = "Password doesn't match";
+                return;
+            }
+
+            // Update password in Firebase
+            database.ref("admin").update({
+                password: newPassword.value
+            }, function (error) {
+                if (error) {
+                    // Handle error
+                } else {
+                    // Update password in session
+                    sessionStorage.setItem("password", newPassword.value);
+                    output.innerHTML = "Password updated successfully";
+
+                    // Add 2-second delay
+                    setTimeout(function () {
+                        modal.style.display = "none";
+                    }, 2000);
+
+                    // Clear text boxes
+                    // oldPassword.value = "";
+                    // newPassword.value = "";
+                    // confirmPassword.value = "";
+
+                }
+            });
+        });
+
 
     </script>
 </body>
