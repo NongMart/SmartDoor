@@ -193,7 +193,7 @@
                         <div class="h-100">
                             <div class="form-group">
                                 <label for="example-text-input" class="form-control-label">name</label>
-                                <!-- <input class="form-control" type="text" value="lucky.jesse"> -->
+                                <!-- <input class="form-control" type="text" > -->
                                 <div class="d-flex align-items-center flex-row">
                                     <h6 id="nameContainer"></h6>
                                     <!-- <i class="fas fa-pencil-alt ms-auto text-dark cursor-pointer mt-3"></i> -->
@@ -209,10 +209,27 @@
                                 <hr class="horizontal dark my-1 mt-4">
                                 <div class="mt-3">
                                     <div id="output"></div>
-                                    <input type="password" id="oldPassword" placeholder="Old Password"><br>
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Old Password</label>
+                                        <input class="form-control" type="password" id="oldPassword">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">New Password</label>
+                                        <input class="form-control" type="password" id="newPassword">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="example-text-input" class="form-control-label">Confirm
+                                            Password</label>
+                                        <input class="form-control" type="password" id="confirmPassword">
+                                    </div>
+                                    <!-- <input type="password" id="oldPassword" placeholder="Old Password" class=""><br>
                                     <input type="password" id="newPassword" placeholder="New Password"><br>
-                                    <input type="password" id="confirmPassword" placeholder="Confirm Password"><br>
-                                    <button class="mt-3" id="updatePasswordBtn">Update Password</button>
+                                    <input type="password" id="confirmPassword" placeholder="Confirm Password"><br> -->
+
+                                    <hr class="horizontal dark my-1 mb-4">
+                                    <div class="col-6 text-start">
+                                        <a class="btn bg-gradient-dark mb-0" id="updatePasswordBtn">Update Password</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -420,12 +437,14 @@
                     // Add 2-second delay
                     setTimeout(function () {
                         modal.style.display = "none";
+                        // Clear text boxes
+                        oldPassword.value = "";
+                        newPassword.value = "";
+                        confirmPassword.value = "";
+                        output.innerHTML = "";
                     }, 2000);
 
-                    // Clear text boxes
-                    // oldPassword.value = "";
-                    // newPassword.value = "";
-                    // confirmPassword.value = "";
+                    
 
                 }
             });
