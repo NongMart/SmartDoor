@@ -1,11 +1,11 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyBsmJrwR4TiIIezxC94aGF4-Cdb7RppUhY",
-  authDomain: "smartdoorit5102-d53ff.firebaseapp.com",
-  databaseURL: "https://smartdoorit5102-d53ff-default-rtdb.firebaseio.com",
-  projectId: "smartdoorit5102-d53ff",
-  storageBucket: "smartdoorit5102-d53ff.appspot.com",
-  messagingSenderId: "735550711784",
-  appId: "1:735550711784:web:fe4dea8899f8f1007ee65d"
+  apiKey: "AIzaSyDRz5xrcq970WcwOb22LcaFxtj_hTVAXw0",
+  authDomain: "smartdoorit5102-2bae0.firebaseapp.com",
+  databaseURL: "https://smartdoorit5102-2bae0-default-rtdb.firebaseio.com",
+  projectId: "smartdoorit5102-2bae0",
+  storageBucket: "smartdoorit5102-2bae0.appspot.com",
+  messagingSenderId: "442157027650",
+  appId: "1:442157027650:web:5436b05172fbf1b7e778db"
 };
 
 // initialize firebase
